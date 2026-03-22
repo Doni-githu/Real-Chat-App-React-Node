@@ -5,6 +5,6 @@ export const Token = {
         return jwt.decode(token, {complete: true})
     },
     encode: (string) => {
-        return jwt.sign(string, "gray123")
+        return jwt.sign({id: string.id}, "gray123")
     }
 }
