@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken"
 
 export const Token = {
     decode: (token) => {
-        return jwt.decode(token, {complete: true})
+        return jwt.verify(token, process.env.JWT_SECRET)
     },
-    encode: (string) => {
-        return jwt.sign({id: string.id}, "gray123")
-    }
+    encode: (user) => {
+        return jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: "7d"})
+    }   
 }
