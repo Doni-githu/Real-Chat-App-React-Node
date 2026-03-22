@@ -6,13 +6,15 @@ export async function checkEmailExists(email) {
 
         if (existingUser) {
             console.log('A user with this email already exists.');
-            return true;
+            return existingUser;
         } else {
             console.log('Email is available.');
-            return false; 
+            return;  
         }
     } catch (err) {
         console.error('Error checking email existence:', err);
         throw err; 
     }
 }
+
+
