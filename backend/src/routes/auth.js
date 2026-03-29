@@ -21,7 +21,7 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Wrong password" })
         }
 
-        const token = Token.encode(exists._id)
+        const token = Token.encode(JSON.stringify(exists._id))
         const user = userWithoutPassword(exists)
 
         return res.status(200).json({
@@ -60,7 +60,7 @@ router.post("/sign-up", async (req, res) => {
 
         const createdUser = await User.create(user)
         const user2 = userWithoutPassword(createdUser)
-        const token = Token.encode({ id: createdUser._id })
+        const token = Token.encode({ id: JSON.stringify(createdUser._id) })
 
 
         return res.status(200).json({
