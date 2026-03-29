@@ -23,3 +23,29 @@ Content-Type: application/json
 GET http://localhost:8000/book/ HTTP/1.1
 Content-Type: application/json
 
+
+### Post a Book 
+POST http://localhost:8000/book/post HTTP/1.1
+Content-Type: application/json
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiXCI2OWJmNTg1ZGNmMjBiMjU1Y2RmYmEyMzlcIiIsImlhdCI6MTc3NDc0OTgwNSwiZXhwIjoxNzc1MzU0NjA1fQ.9icfTjAQOs2g5ZuMImjSThEPZzYSdbxJZYZrTL73bw8
+
+{
+    "title": "The Title",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe beatae iste perferendis voluptatum dolorum sequi obcaecati dignissimos, repudiandae, id nulla sint explicabo non ipsam sed ad doloremque minus quia! Quisquam!\nCum repudiandae quia consequatur incidunt cupiditate animi aspernatur mollitia, quo aliquid et, expedita perspiciatis ut aliquam magni at debitis libero iste veniam a excepturi delectus! Error similique voluptas ad omnis.\nVoluptate impedit facilis voluptatem debitis earum? Earum doloremque eaque dicta asperiores voluptas iure recusandae beatae, ipsa, eveniet quia nam veritatis eius quod tenetur, alias repellat! Itaque doloribus voluptates suscipit molestiae?\nEveniet mollitia sed animi error praesentium necessitatibus eum, magnam deserunt veritatis amet. Placeat suscipit fuga quidem ipsa, aperiam deleniti id ducimus perspiciatis nemo totam voluptate. A odio quia harum quod!\nBeatae magnam suscipit mollitia, fuga reiciendis impedit nulla accusantium perspiciatis veritatis id tenetur voluptatum aliquid? Provident, temporibus iusto numquam a beatae necessitatibus alias. Blanditiis voluptatem molestias impedit sint culpa eos.",
+    "file":"file" 
+}
+
+### Edit a Book 
+PATCH http://localhost:8000/book/69c88e2e7e6d7126e6ce1554 HTTP/1.1
+Content-Type: application/json
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiXCI2OWJmNTg1ZGNmMjBiMjU1Y2RmYmEyMzlcIiIsImlhdCI6MTc3NDc0OTgwNSwiZXhwIjoxNzc1MzU0NjA1fQ.9icfTjAQOs2g5ZuMImjSThEPZzYSdbxJZYZrTL73bw8
+
+{
+    "title": "The new Title"
+}
+
+
+### Delete a Book 
+DELETE  http://localhost:8000/book/69c88e2e7e6d7126e6ce1554 HTTP/1.1
+Content-Type: application/json
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiXCI2OWJmNTg1ZGNmMjBiMjU1Y2RmYmEyMzlcIiIsImlhdCI6MTc3NDc0OTgwNSwiZXhwIjoxNzc1MzU0NjA1fQ.9icfTjAQOs2g5ZuMImjSThEPZzYSdbxJZYZrTL73bw8
