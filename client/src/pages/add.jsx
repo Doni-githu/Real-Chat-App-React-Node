@@ -1,8 +1,9 @@
 import React from 'react'
+import AddBook from '../components/Add/Add'
 
 function Add() {
     return (
-        <div>Add</div>
+        <div><AddBook /></div>
     )
 }
 
