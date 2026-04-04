@@ -2,6 +2,9 @@ import { Router } from "express";
 import Book from "../models/book.js";
 import userCheck from "../middlewares/user.js"
 import owner from "../middlewares/owner.js";
+import upload from "../utils/multer.js";
+import imagekit from "../utils/imagekit.js";
+
 
 const router = Router()
 
@@ -10,8 +13,16 @@ router.get("/", async (req, res) => {
     res.status(200).json(data)
 })
 
-router.post("/post", userCheck, async (req, res) => {
-    const { title, description, file } = req.body
+router.post("/post", userCheck, upload.single('file'), async (req, res) => {
+    const { title, description } = req.body
+
+    imagekit.upload({
+        file: req.file.buffer,
+        fileName: req.file.originalname
+    }, (err, result) => {
+        if(err) res.status(500).send(err);
+        else res.send(result);
+    })
 
     const data = {
         title,
