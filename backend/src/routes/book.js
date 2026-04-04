@@ -16,32 +16,31 @@ router.get("/", async (req, res) => {
 router.post("/post", userCheck, upload.single('file'), async (req, res) => {
     const { title, description } = req.body
 
-    imagekit.upload({
+    const result = await imagekit.upload({
         file: req.file.buffer,
-        fileName: req.file.originalname
-    }, (err, result) => {
-        if(err) res.status(500).send(err);
-        else res.send(result);
+        fileName: req.file.originalname,
+        
     })
 
     const data = {
         title,
         description,
-        file,
-        author: req.user._id
+        book: result.url,
+        author: req.user._id,
+        cover: result
     }
     const posted = await Book.create(data)
     return res.status(201).json({ message: "Successfully posted!!!", data: posted })
 })
 
 router.delete("/:id", userCheck, owner, async (req, res) => {
-    try{
+    try {
         await Book.findByIdAndDelete(req.params.id)
         res.status(200).json({ message: "Successfully deleted book." })
-    
-    }catch(error) {
+
+    } catch (error) {
         console.log("Error in delete route: " + error)
-        res.status(500).json({message: "Server error"})        
+        res.status(500).json({ message: "Server error" })
     }
 })
 
@@ -55,7 +54,7 @@ router.patch("/:id", userCheck, owner, async (req, res) => {
         description: Description,
         file: File
     }
-    const edited = await Book.findByIdAndUpdate(req.params.id, data, {returnDocument: "after"})
+    const edited = await Book.findByIdAndUpdate(req.params.id, data, { returnDocument: "after" })
     res.status(200).json({ message: "Book Successfully changed", data: edited })
 })
 

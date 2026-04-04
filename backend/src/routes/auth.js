@@ -4,6 +4,8 @@ import { Token } from "../utils/token.js"
 import { checkEmailExists } from "../utils/email.js";
 import User from "../models/user.js";
 import { userWithoutPassword } from "../utils/index.js";
+import upload from "../utils/multer.js";
+import imagekit from "../utils/imagekit.js";
 
 const router = Router()
 
@@ -40,21 +42,26 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.post("/sign-up", async (req, res) => {
+router.post("/sign-up", upload.single('avatar'), async (req, res) => {
     try {
 
-        const { password, full_name, email, avatar } = req.body
-
+        const { password, full_name, email } = req.body
         const existingUser = await checkEmailExists(email)
+        
         if (existingUser) {
             return res.status(400).json({ message: "A user with this email already exists." })
         }
         const hashedPassoword = await bcrypt.hash(password, 10)
+        const result = await imagekit.upload({
+            file: req.file.buffer,
+            fileName: req.file.originalname,
+        })
 
+        
         const user = {
             full_name,
             email,
-            avatar,
+            avatar: result.url,
             password: hashedPassoword,
         }
 

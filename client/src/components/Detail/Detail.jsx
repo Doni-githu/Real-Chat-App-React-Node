@@ -1,6 +1,5 @@
 import React from 'react'
 import { useParams } from "react-router"
-// import PDFReader from "../PDF_Reader/PDF_Reader"
 
 function DetailComponent() {
   const params = useParams()
