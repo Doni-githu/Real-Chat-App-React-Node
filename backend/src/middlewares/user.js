@@ -7,7 +7,7 @@ export default async function(req, res, next) {
         }
         const token = req.headers.authorization.split(" ")[1]
         const data = Token.decode(token)
-        const id = JSON.parse(data.payload.data)
+        const id = data.payload.data
         const user = await User.findById(id).select('-password')
         req.user = user
         next()

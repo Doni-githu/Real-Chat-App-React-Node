@@ -1,7 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt"
 import { Token } from "../utils/token.js"
-import { checkEmailExists } from "../utils/email.js";
 import User from "../models/user.js";
 import { userWithoutPassword } from "../utils/index.js";
 import upload from "../utils/multer.js";
@@ -23,7 +22,7 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Wrong password" })
         }
 
-        const token = Token.encode(JSON.stringify(exists._id))
+        const token = Token.encode(exists._id)
         const user = userWithoutPassword(exists)
 
         return res.status(200).json({
@@ -44,18 +43,24 @@ router.post("/login", async (req, res) => {
 
 router.post("/sign-up", upload.single('avatar'), async (req, res) => {
     try {
-
         const { password, full_name, email } = req.body
-        const existingUser = await checkEmailExists(email)
+        const existingUser = await User.findOne({ email: email });
         
         if (existingUser) {
             return res.status(400).json({ message: "A user with this email already exists." })
         }
+
+        if (!req.file) {
+            return res.status(400).json({ message: "Avatar file is required" });
+        }
+
         const hashedPassoword = await bcrypt.hash(password, 10)
         const result = await imagekit.upload({
             file: req.file.buffer,
             fileName: req.file.originalname,
+            folder: '/avatar'
         })
+
 
         
         const user = {
@@ -67,8 +72,7 @@ router.post("/sign-up", upload.single('avatar'), async (req, res) => {
 
         const createdUser = await User.create(user)
         const user2 = userWithoutPassword(createdUser)
-        const token = Token.encode({ id: JSON.stringify(createdUser._id) })
-
+        const token = Token.encode({ id: createdUser._id })
 
         return res.status(200).json({
             message: "The person registered",

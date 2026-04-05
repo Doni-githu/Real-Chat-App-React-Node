@@ -9,25 +9,33 @@ import imagekit from "../utils/imagekit.js";
 const router = Router()
 
 router.get("/", async (req, res) => {
-    const data = await Book.find()
+    const data = await Book.find().lean()
     res.status(200).json(data)
 })
 
-router.post("/post", userCheck, upload.single('file'), async (req, res) => {
+const uploadMiddleware = upload.fields([{name: 'file', maxCount: 1}, {name: 'cover', maxCount: 1}])
+router.post("/post", userCheck, uploadMiddleware, async (req, res) => {
     const { title, description } = req.body
+    const book = req.files['file'][0]
+    const cover = req.files['cover'][0]
 
-    const result = await imagekit.upload({
-        file: req.file.buffer,
-        fileName: req.file.originalname,
-        
+    const externalBook = await imagekit.upload({
+        file: book.buffer,
+        fileName: book.originalname,
+        folder: "/books"
+    })
+    const externalCover = await imagekit.upload({
+        file: cover.buffer,
+        fileName: cover.originalname,
+        folder: "/covers"
     })
 
     const data = {
         title,
         description,
-        book: result.url,
+        book: externalBook.url,
         author: req.user._id,
-        cover: result
+        cover: externalCover.url
     }
     const posted = await Book.create(data)
     return res.status(201).json({ message: "Successfully posted!!!", data: posted })
@@ -44,11 +52,17 @@ router.delete("/:id", userCheck, owner, async (req, res) => {
     }
 })
 
-router.patch("/:id", userCheck, owner, async (req, res) => {
-    const { title, description, file } = req.book
+router.patch("/:id", userCheck, owner, uploadMiddleware, async (req, res) => {
+    const { title, description, cover, file } = req.book
+    const newCover = req.files['cover'][0]
+    const newBook = req.files['file'][0]
     const Title = req.body.title ? req.body.title : title
     const Description = req.body.description ? req.body.description : description
-    const File = req.body.file ? req.body.file : file
+    
+    if(newCover) {
+        
+    }
+    
     const data = {
         title: Title,
         description: Description,

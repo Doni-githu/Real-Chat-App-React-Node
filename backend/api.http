@@ -1,13 +1,12 @@
 ### Register User
-POST http://localhost:8000/auth/sign-up HTTP/1.1
-Content-Type: application/json
+POST http://localhost:8000/auth/sign-up
+Content-Type: multipart/form-data
 
-{
-    "email": "ddonierov91212313112@gmail.com",
-    "full_name": "Doniyorov Doniyor",
-    "password": "password123",
-    "avatar": "https://picsum.photos/50/50"
-}
+
+email=ddonierov91212313112@gmail.com
+full_name=Doniyorov Doniyor
+password=password123
+avatar=@c:\Users\User\Pictures\175534-fioletovyj-windows_10-okna_11-dnevnoe_osveshhenie-svet-1920x1080.jpg
 
 ### Login User 
 POST http://localhost:8000/auth/login HTTP/1.1
