@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { AuthService } from "../../service/auth";
+import { useContext, useState } from "react";
+import { AuthContext, USER_UPDATE } from "../../context/auth";
 
 const schema = yup.object({
   full_name: yup
@@ -41,8 +44,10 @@ export default function Register() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const [loading, setLoading] = useState(false)
+  const {dispatch} = useContext(AuthContext)
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const formData = new FormData();
 
     formData.append("full_name", data.full_name);
@@ -50,8 +55,16 @@ export default function Register() {
     formData.append("password", data.password);
     formData.append("avatar", data.avatar[0]);
 
-    console.log("Register Data:", data);
-
+    try {
+      setLoading(true)
+      const data =  await AuthService.register(data)
+      dispatch({type: USER_UPDATE, payload: data.data.user})
+      localStorage.setItem("token", data.data.token)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   };
 
   return (
@@ -100,8 +113,8 @@ export default function Register() {
           />
           <small className="text-danger">{errors.avatar?.message}</small>
 
-          <button className="btn btn-primary w-100 mt-3">
-            Register
+          <button className="btn btn-primary w-100 mt-3" disabled={loading}>
+            {loading ? 'Loading...' : 'Register'}
           </button>
         </form>
       </div>

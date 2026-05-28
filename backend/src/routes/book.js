@@ -24,6 +24,7 @@ router.post("/post", userCheck, uploadMiddleware, async (req, res) => {
         fileName: book.originalname,
         folder: "/books"
     })
+
     const externalCover = await imagekit.upload({
         file: cover.buffer,
         fileName: cover.originalname,
@@ -33,17 +34,19 @@ router.post("/post", userCheck, uploadMiddleware, async (req, res) => {
     const data = {
         title,
         description,
-        book: externalBook.url,
+        book: {url: externalBook.url, id: externalBook},
         author: req.user._id,
         cover: externalCover.url
     }
+
     const posted = await Book.create(data)
     return res.status(201).json({ message: "Successfully posted!!!", data: posted })
 })
 
 router.delete("/:id", userCheck, owner, async (req, res) => {
     try {
-        await Book.findByIdAndDelete(req.params.id)
+        const book = await Book.findByIdAndDelete(req.params.id)
+            
         res.status(200).json({ message: "Successfully deleted book." })
 
     } catch (error) {

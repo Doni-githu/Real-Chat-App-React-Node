@@ -4,6 +4,8 @@ const BookSchema = new Schema({
     title: {type: String, required: true},
     description: {type: String, required: true},
     book: {type: String, required: true},
+    bookId: {type: String, required: true},
+    authorId: {type: String, required: true},
     author: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     cover: {type: String, required: true},
 })

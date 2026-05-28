@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Home from "./pages/home"
 import Login from "./pages/login"
 import Register from "./pages/register"
@@ -7,6 +7,7 @@ import Detail from "./pages/detail"
 import { Routes, Route } from "react-router"
 import "./App.css"
 import Navbar from './components/Navbar/Navbar'
+import { AuthContext } from './context/auth'
 
 function App() {
   return (
